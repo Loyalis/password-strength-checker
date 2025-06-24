@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Password Strength Checker - Designed by Casu Laurențiu Gabriel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{{ url_for('index') }}">🛡️ Password Checker</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="{{ url_for('index') }}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('about') }}">About</a>
+        </li>
+      </ul>
+   </div>
+</nav>
+
+
+
+<div class="container py-4">
+
+  <h1 class="mb-4 text-primary">Check Your Password Strength</h1>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+  {% endwith %}
+
+  <form method="POST">
+    <div class="mb-3">
+      <label for="password" class="form-label">Enter a password:</label>
+      <input type="password" class="form-control" id="password" name="password" required autocomplete="off" />
+    </div>
+    <button type="submit" class="btn btn-primary">Check</button>
+  </form>
+
+  {% if result %}
+  <div class="mt-4">
+    <h4>Password Analysis</h4>
+    <div class="alert alert-info">{{ result.message }}</div>
+
+    {% if result.criteria %}
+    <ul class="list-group mb-3">
+      <li class="list-group-item d-flex justify-content-between">Length ≥ 8 <span>{{ "✅" if result.criteria.length else "❌" }}</span></li>
+      <li class="list-group-item d-flex justify-content-between">Uppercase Letter <span>{{ "✅" if result.criteria.uppercase else "❌" }}</span></li>
+      <li class="list-group-item d-flex justify-content-between">Lowercase Letter <span>{{ "✅" if result.criteria.lowercase else "❌" }}</span></li>
+      <li class="list-group-item d-flex justify-content-between">Digit <span>{{ "✅" if result.criteria.digit else "❌" }}</span></li>
+      <li class="list-group-item d-flex justify-content-between">Special Character <span>{{ "✅" if result.criteria.special else "❌" }}</span></li>
+    </ul>
+    {% endif %}
+
+    <p>Entropy: <strong>{{ result.entropy }} bits</strong></p>
+    <div class="alert alert-{{ "success" if result.strength == "Strong" else "warning" if result.strength == "Medium" else "danger" }}">
+      <strong>{{ result.strength }}</strong>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if saved_passwords %}
+  <div class="mt-5">
+    <h4>Saved Passwords</h4>
+    <table class="table table-bordered">
+      <thead><tr><th>ID</th><th>Hashed Password</th></tr></thead>
+      <tbody>
+        {% for id, pwd in saved_passwords %}
+        <tr><td>{{ id }}</td><td>{{ pwd }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <footer class="mt-5 py-4 text-center text-muted">
+    <small><strong>Designed and developed by Casu Laurențiu Gabriel — Cybersecurity Enthusiast © {{ current_year }}</strong></small>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

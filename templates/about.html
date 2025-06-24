@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>About - Password Strength Checker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{{ url_for('index') }}">🛡️ Password Checker</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{{ url_for('about') }}">About</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <h1 class="text-primary mb-4">About This Project</h1>
+
+  <!-- SECTION 1: About Me -->
+  <section class="mb-5">
+    <h2 class="text-primary">👨‍💻 About Me</h2>
+    <p>
+      Hello! I’m <strong>Casu Laurențiu Gabriel</strong>, a Technical Support Engineer and a self-taught Cybersecurity Enthusiast. Although my professional experience doesn’t involve writing web apps from scratch, I’ve always been curious about how secure systems work—and I’ve made it my goal to learn through hands-on practice.
+    </p>
+    <p>
+      This project is my way of stepping into that world. I knew that understanding password security would be a great place to begin, so I challenged myself to build this strength checker from the ground up. Along the way, I learned about password entropy, input validation, Flask routing, regex, database storage, and much more. And while I still don’t consider myself an expert, I’m proud of the progress this reflects.
+    </p>
+  </section>
+
+  <!-- SECTION 2: Code Insights -->
+  <section>
+    <h2 class="text-primary">🔍 Project Breakdown & Code Highlights</h2>
+
+    <h5>🧪 Key Features:</h5>
+    <ul>
+      <li>Checks password strength using character types, length, and patterns</li>
+      <li>Calculates entropy to estimate password randomness</li>
+      <li>Flags weak or leaked passwords using <code>rockyou.txt</code></li>
+      <li>Hashes and stores strong passwords in a local SQLite database</li>
+      <li>Displays real-time feedback using Flask and Bootstrap</li>
+    </ul>
+
+    <h5 class="mt-4">🧠 Important Code Concepts:</h5>
+
+    <p><strong>App Setup & Secrets:</strong>  
+    I use <code>Flask</code> to create routes and render pages. The app’s secret key is stored in a hidden <code>.env</code> file using <code>dotenv</code> so it’s never exposed directly in the code.</p>
+
+    <p><strong>Loading Leaked Passwords:</strong>  
+    I included a function that loads leaked passwords from the famous <code>rockyou.txt</code> list into a Python <code>set</code>. This lets me instantly check if a user’s password has been exposed in real-world breaches.</p>
+
+    <p><strong>Checking Password Strength:</strong>  
+    I use Python’s <code>re</code> module (regular expressions) to check if a password has lowercase, uppercase, digits, symbols, and a minimum length of 8 characters. It also scans for names like "gabriel" to discourage predictable personal patterns.</p>
+
+    <p><strong>Entropy Calculation:</strong>  
+    This formula estimates how hard a password is to guess:
+    <br><code>entropy = length * log2(character_set_size)</code>  
+    The more varied the characters and longer the password, the better.</p>
+
+    <p><strong>Hashing & Storage:</strong>  
+    If a password is marked “Strong,” it gets hashed using Werkzeug’s <code>generate_password_hash()</code> before being saved. This simulates how real apps never store plain passwords—only hashes.</p>
+
+    <p><strong>Database & Initialization:</strong>  
+    On app startup, a function checks if the <code>passwords</code> table exists in SQLite. If not, it creates it, and from there I can store and retrieve strong password hashes for display.</p>
+
+    <p><strong>Routing & Templates:</strong>  
+    The <code>/</code> route handles both GET and POST requests, displaying the form and accepting input. The <code>/about</code> route loads this page. Flask handles the logic, while Bootstrap makes it look good.</p>
+
+    <p class="mt-4">
+      Overall, this project helped me connect real-world security concepts with practical code. I’m still learning every day, but I now have a clearer understanding of what it takes to build safer, smarter tools—and the confidence that I can keep growing from here.
+    </p>
+  </section>
+
+  <a href="{{ url_for('index') }}" class="btn btn-secondary mt-4">← Back to Checker</a>
+
+  <footer class="mt-5 py-4 text-center text-muted">
+    <small><strong>Designed and developed by Casu Laurențiu Gabriel — Cybersecurity Enthusiast © {{ current_year }}</strong></small>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
